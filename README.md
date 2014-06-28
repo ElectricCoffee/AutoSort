@@ -1,7 +1,7 @@
 AutoSort
 ========
 
-*Current status*: Planning
+*Current status*: In Progress
 
 Here's the gist of it:
 

@@ -213,3 +213,19 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+##########
+## SBT
+##########
+
+target/
+
+###########
+## IDEA
+###########
+
+.idea/
+*.imr
+*.ipl
+*.ims
+.idea_modules/

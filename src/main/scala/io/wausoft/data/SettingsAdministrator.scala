@@ -1,18 +1,15 @@
 package io.wausoft.data
 
 import java.io.File
+import net.liftweb.json.{DefaultFormats, parse}
 import org.apache.commons.io.{FilenameUtils, FileUtils}
-import net.liftweb._
 
 object SettingsAdministrator {
-  def deserializeSettingsFile(path: String): SettingsContainer = {
-    val ext = FilenameUtils getExtension path
+  def deserializeSettingsFile(file: File): SettingsContainer = {
+    implicit val formats = DefaultFormats // required for .extract to work
+    val ext = FilenameUtils getExtension file.toString
     require(ext.toLowerCase == "json") // make sure only json files can be read
-    val content = FileUtils.readFileToString(new File(path), "UTF-8")
-    json.parse(content).extract[SettingsContainer]
-  }
-
-  def executeSettings(settings: SettingsContainer): Unit = {
-    // TODO: Add what needs to be done with the de-serialised settings data
+    val content = FileUtils.readFileToString(file, "UTF-8")
+    parse(content).extract[SettingsContainer]
   }
 }

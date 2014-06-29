@@ -2,7 +2,7 @@ package io.wausoft.data
 
 /* Example of a settings file:
  * {
- *   "auto-sort-folder-path": "C:\Users\ElectricCoffee\Desktop\AutoSort",
+ *   "autosort-folder-path": "C:\Users\ElectricCoffee\Desktop\AutoSort",
  *   "local-settings": [{
  *     "source-program": null,
  *     "file-types": ["iso", "dmg"],
@@ -12,5 +12,5 @@ package io.wausoft.data
  * }
  */
 
-case class SettingsContainer(autoSortFolderPath: String, localSettings: List[LocalSettingsContainer])
-case class LocalSettingsContainer(sourceProgram: Option[String], fileTypes: List[String], destinationPath: String, keywords: List[String])
+case class SettingsContainer(`autosort-folder-path`: String, `local-settings`: List[LocalSettingsContainer])
+case class LocalSettingsContainer(`source-program`: Option[String], `file-types`: List[String], `destination-path`: String, keywords: List[String])

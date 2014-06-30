@@ -5,6 +5,8 @@ import java.io.File
  * A completely OS-Agnostic way of dealing with java.io.File paths
  */
 object RichPath {
+  val homeDir = System.getProperty("user.home").toFile
+
   sealed class RichBase[+A](left: A) {
     /**
      * Simple enrichment method designed to let you create a java.io.File

@@ -1,7 +1,9 @@
 package io.wausoft.data
 
+import java.io.{File => JavaFile}
+
 object FileType {
   trait Type
-  case object File extends Type
-  case object Directory extends Type
+  case class File(path: JavaFile) extends Type
+  case class Directory(path: JavaFile) extends Type
 }

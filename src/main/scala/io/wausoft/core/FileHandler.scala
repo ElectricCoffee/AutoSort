@@ -8,17 +8,25 @@ import java.io.File
 object FileHandler {
   // making all this lazy so it doesn't freak out with a ton of IO the very moment the class is called,
   // but rather doing the IO when it's needed
-  lazy val dir: File = ensureFile(RichPath.homeDir / ".autosort", FileType.Directory)
-  lazy val fileLocation: File = ensureFile(dir / "settings.json", FileType.File)
+  lazy val dir: File = ensureFile(FileType.Directory(RichPath.homeDir / ".autosort"))
+  lazy val fileLocation: File = ensureFile(FileType.File(dir / "settings.json"))
   lazy val settings = SettingsAdministrator deserializeSettingsFile fileLocation
 
   /**
    * Makes sure the file is there and returns it
-   * @param file the file we need to make sure exists
    * @param kind the kind of file we're dealing with, i.e. dir or file
    * @return The specified file
    */
-  def ensureFile(file: File, kind: FileType.Type): File = {
+  def ensureFile(kind: FileType.Type): File = kind match {
+    case FileType.Directory(d) =>
+      if(!d.exists) d.mkdir
+      d
+    case FileType.File(f) =>
+      if(!f.exists) generateSettingsFile(f)
+      f
+  }
+
+/*  {
     if (!file.exists && kind == FileType.Directory) { // if directory, make directory
       file.mkdir
     }
@@ -27,7 +35,7 @@ object FileHandler {
     }
     require(file.exists) // file SHOULD exist now, if not, crash.
     file // if nothing crashes, return the file
-  }
+  }*/
 
   /**
    * Generates an empty settings file at the given path

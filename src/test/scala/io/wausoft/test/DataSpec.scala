@@ -14,8 +14,8 @@ class DataSpec extends FlatSpec {
     val folderA = testFolder / "FolderA"
     val folderB = testFolder / "FolderB"
     def mkTestDir(): Unit = {
-      for(i <- 1 to 10) FileHandler ensureFile (folderA / s"file$i.txt", FileType.File)
-      FileHandler ensureFile (folderB, FileType.Directory)
+      for(i <- 1 to 10) FileHandler ensureFile FileType.File(folderA / s"file$i.txt")
+      FileHandler ensureFile FileType.Directory(folderB)
     }
   }
 
@@ -28,7 +28,7 @@ class DataSpec extends FlatSpec {
 
   "EnsureFile" must "ensure the existence of a file or folder" in {
     val f = fixture
-    FileHandler ensureFile (f.testFolder, FileType.Directory)
+    FileHandler ensureFile FileType.Directory(f.testFolder)
     assert(f.testFolder.exists, "because the folder did not exist")
     f.testFolder.delete // delete folder after test passes, we don't need it
   }
@@ -36,7 +36,7 @@ class DataSpec extends FlatSpec {
   it must "ensure the existence of an empty settings file" in {
     val f = fixture
     if(f.testFile.exists) f.testFile.delete // if it's there, delete it so we can get a clean test
-    FileHandler ensureFile (f.testFile, FileType.File)
+    FileHandler ensureFile FileType.File(f.testFile)
     assert(f.testFile.exists)
     val content  = FileUtils readFileToString f.testFile
     val required =

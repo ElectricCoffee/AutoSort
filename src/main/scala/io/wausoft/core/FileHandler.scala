@@ -35,14 +35,20 @@ object FileHandler {
    * @param file the file path and name of the file we want to generate
    */
   def generateSettingsFile(file: File): Unit = {
-    val str = // generate empty settings file
-      s"""
-         |{
-         |  "autosort-folder-path": "${(home / "Desktop" / "AutoSort").toString}",
+    val data = // generate empty settings file
+      s"""{
+         |  "autosort-folder-path": "${(home / "Desktop" / "AutoSort").toEscapedString}",
          |  "local-settings": []
-         |}
-      """.stripMargin
+         |}""".stripMargin
 
-    FileUtils writeStringToFile (file, str)
+    FileUtils writeStringToFile (file, data)
+  }
+
+  def deleteFolder(folder: File): Boolean = {
+    if(folder.isDirectory) {
+      for(file <- folder.listFiles) file.delete
+      folder.delete
+    }
+    else false
   }
 }

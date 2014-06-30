@@ -1,15 +1,15 @@
 package io.wausoft.core
 
 import io.wausoft.data._
-import io.wausoft.data.RichPath.{RichFile, RichString} // enables the use of '/' for files
+import io.wausoft.data.RichPath._ // enables the use of '/' for files
 import org.apache.commons.io.FileUtils
 import java.io.File
 
 object FileHandler {
   // making all this lazy so it doesn't freak out with a ton of IO the very moment the class is called,
   // but rather doing the IO when it's needed
-  lazy val dir: File = ensureFile(RichPath.homeDir / ".autosort", 'dir)
-  lazy val fileLocation: File = ensureFile(dir / "settings.json", 'file)
+  lazy val dir: File = ensureFile(RichPath.homeDir / ".autosort", FileType.Directory)
+  lazy val fileLocation: File = ensureFile(dir / "settings.json", FileType.File)
   lazy val settings = SettingsAdministrator deserializeSettingsFile fileLocation
 
   /**
@@ -18,11 +18,11 @@ object FileHandler {
    * @param kind the kind of file we're dealing with, i.e. dir or file
    * @return The specified file
    */
-  def ensureFile(file: File, kind: Symbol): File = {
-    if (!file.exists && kind == 'dir) { // if directory, make directory
+  def ensureFile(file: File, kind: FileType.Type): File = {
+    if (!file.exists && kind == FileType.Directory) { // if directory, make directory
       file.mkdir
     }
-    else if(!file.exists && kind == 'file) { // if file, make file template
+    else if(!file.exists && kind == FileType.File) { // if file, make file template
       generateSettingsFile(file)
     }
     require(file.exists) // file SHOULD exist now, if not, crash.

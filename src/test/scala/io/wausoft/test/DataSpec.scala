@@ -1,14 +1,14 @@
 package io.wausoft.test
 
-import org.scalatest.FlatSpec
+import org.scalatest.{Matchers, FlatSpec}
 import org.apache.commons.io.FileUtils
+import io.wausoft.core.FileHandler
 import io.wausoft.data._
 import io.wausoft.data.container._
 import io.wausoft.data.RichPath._
-import io.wausoft.core.FileHandler
-import java.io.{File => JavaFile}
+import java.io.{File => JavaFile, IOException}
 
-class DataSpec extends FlatSpec {
+class DataSpec extends FlatSpec with Matchers {
   def fixture = new {
     val testFolder = RichPath.homeDir / "Desktop" / "TestFolder"
     val testFile   = testFolder / "test.json"
@@ -19,7 +19,6 @@ class DataSpec extends FlatSpec {
       for(i <- 1 to 10) FileHandler ensure File(folderA / s"file$i.txt")
       FileHandler ensure Directory(folderB)
     }
-
     def cleanup(): Unit = FileHandler.deleteFolder(testFolder, recursive = true)
   }
 
@@ -27,68 +26,82 @@ class DataSpec extends FlatSpec {
     val home = System.getProperty("user.home")
     val dir1 = new JavaFile(new JavaFile(home, "Setting"), "Closures") // without rich path
     val dir2 = home / "Setting" / "Closures" // with rich path
-    assert(dir1 === dir2)
+    dir1 should equal (dir2)
   }
 
-  "EnsureFile" must "ensure the existence of a file or folder" in {
+  "EnsureFile" should "ensure the existence of a file or folder" in {
     val f = fixture
     FileHandler ensure Directory(f.testFolder)
-    assert(f.testFolder.exists === true, "because the folder did not exist")
-    f.testFolder.delete // delete folder after test passes, we don't need it
+    f.testFolder.exists shouldBe true
   }
 
-  it must "ensure the existence of an empty settings file" in {
+  it should "create a file or folder of the correct type" in {
+    // this test runs off of the folder we created earlier
+    fixture.testFolder should be a 'directory
+  }
+
+  it should "ensure the existence of an empty settings file" in {
     val f = fixture
-    if(f.testFile.exists) f.testFile.delete // if it's there, delete it so we can get a clean test
     FileHandler ensure File(f.testFile)
-    assert(f.testFile.exists)
-    val content  = FileUtils readFileToString f.testFile
+    f.testFile.exists shouldBe true
+  }
+
+  it should "ensure the file is indeed a file" in {
+    // once again, this goes off the file created in the previous test
+    fixture.testFile should be a 'file
+  }
+
+  it should "contain pre-generated content equal to the following" in {
+    val content  = FileUtils readFileToString fixture.testFile
     val required =
       s"""{
          |  "autosort-folder-path": "${(RichPath.homeDir / "Desktop" / "AutoSort").toEscapedString}",
          |  "local-settings": []
          |}""".stripMargin
 
-    assert(content === required)
+    content should equal (required)
   }
 
-  "DeleteFolder" must "successfully delete a folder and all its content" in {
+  "DeleteFolder" should "successfully delete a folder and all its content" in {
     val f = fixture
     FileHandler deleteFolder (f.testFolder, recursive = true)
-    assert(f.testFolder.exists === false)
+    f.testFolder.exists shouldBe false
   }
 
-  it must "return false and spare anything that isn't a folder" in {
+  it should "throw an exception if directly targeting something that isn't a folder" in {
     val testFile = RichPath.homeDir / "Desktop" / "test.txt"
     FileUtils writeStringToFile (testFile, "")
-    intercept[java.io.IOException] {
-      FileHandler deleteFolder testFile
-    }
-    assert(testFile.exists === true)
+
+    an [IOException] should be thrownBy (FileHandler deleteFolder testFile)
+    testFile.exists shouldBe true
     testFile.delete
   }
 
-  "moveFiles" must "successfully move all the files from one folder to another" in {
+  "move" should "successfully move all the files from one folder to another" in {
     val f = fixture
     f.mkTestDir() // create working directory
-    FileHandler moveData MoveDir(f.folderA, f.folderB)
-    assert(f.folderA.listFiles.length === 0)
-    assert(f.folderB.listFiles.length === 10) // make sure that the files have actually been moved
+    FileHandler move MoveDir(f.folderA, f.folderB)
+
+    f.folderA.listFiles should have length 0
+    f.folderB.listFiles should have length 10 // make sure that the files have actually been moved
+
     f.cleanup() // nuke the folder recursively, we don't need it anymore
   }
 
-  it must "successfully move files based on predicate" in {
+  it should "successfully move files based on predicate" in {
     val f = fixture
     f.mkTestDir()
-    FileHandler.moveData(MoveDir(f.folderA, f.folderB), _.getName contains "1")
+    FileHandler.move(MoveDir(f.folderA, f.folderB), _.getName contains "1")
     // only 2 file names contain 1, that being file1.txt and file10.txt
     // meaning we can assume folderA only has 8 files left
-    assert(f.folderA.listFiles.length === 8)
-    assert(f.folderB.listFiles.length === 2) // and that folderB contains 2 because of that
+    f.folderA.listFiles should have length 8
+    f.folderB.listFiles should have length 2 // and that folderB contains 2 because of that
+
     f.cleanup() // nuke the folder recursively, we don't need it anymore
   }
 
   "MoveDir and MoveFile" should "Throw IllegalArgumentException if given the wrong kind of file" in {
+
     val f = fixture
     val from = f.testFolder / "from-dir"
     val to = f.testFolder / "to-dir"
@@ -96,12 +109,9 @@ class DataSpec extends FlatSpec {
     FileHandler ensure Directory(from)
     FileHandler ensure Directory(to)
 
-    intercept[java.lang.IllegalArgumentException] {
-      MoveDir(f.testFile, to)
-    }
-    intercept[java.lang.IllegalArgumentException] {
-      MoveFile(from, to)
-    }
+    an [IllegalArgumentException] should be thrownBy MoveDir(f.testFile, to)
+    an [IllegalArgumentException] should be thrownBy MoveFile(from, to)
+
     f.cleanup()
   }
 }

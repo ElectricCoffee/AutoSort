@@ -58,9 +58,9 @@ object FileHandler {
    * Or move a specific subset of files given a predicate
    * @param predicate a predicate that designates the rules of whatever files must be moved
    */
-  def moveData(movement: DataMovement, predicate: JavaFile => Boolean = _ => true): Unit = movement match {
+  def move(movement: DataMovement, predicate: JavaFile => Boolean = _ => true): Unit = movement match {
     case MoveDir(origin, destination) =>
-      for(file <- origin.listFiles if predicate(file)) moveData(MoveFile(file, destination))
+      for(file <- origin.listFiles if predicate(file)) move(MoveFile(file, destination))
     case MoveFile(file, destination) =>
       FileUtils.moveFileToDirectory(file, destination, !destination.exists)
   }

@@ -4,6 +4,7 @@ package io.wausoft.data
  * {
  *   "autosort-folder-path": "C:\Users\ElectricCoffee\Desktop\AutoSort",
  *   "local-settings": [{
+ *     "title": "Disk Images",
  *     "file-types": ["iso", "dmg"],
  *     "destination-path": "C:\Users\ElectricCoffee\DiskImages",
  *     "keywords": []
@@ -12,4 +13,4 @@ package io.wausoft.data
  */
 
 case class SettingsContainer(`autosort-folder-path`: String, `local-settings`: List[LocalSettingsContainer])
-case class LocalSettingsContainer(`file-types`: List[String], `destination-path`: String, keywords: List[String])
+case class LocalSettingsContainer(title: String, `file-types`: List[String], `destination-path`: String, keywords: List[String])

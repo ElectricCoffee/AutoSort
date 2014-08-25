@@ -13,9 +13,8 @@ class Program extends Application {
   override def start(stage: Stage): Unit = {
     val loader = new FXMLLoader(classOf[Program] getResource "/MainWindow.fxml")
     val root = loader.load.asInstanceOf[Parent]
-    val scene = new Scene(root, 570, 400)
     stage setTitle "AutoSort Configuration"
-    stage setScene scene
+    stage setScene new Scene(root, 570, 370)
     stage.show()
   }
 }

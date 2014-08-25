@@ -10,34 +10,30 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 
-<GridPane hgap="10" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="573.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.wausoft.controller.UIController">
+<GridPane fx:id="root" hgap="10" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.wausoft.controller.UIController">
     <padding>
-        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+        <Insets bottom="10.0" left="25.0" right="25.0" top="25.0" />
     </padding>
    <children>
        <Label prefHeight="17.0" prefWidth="110.0" text="Destination Folder:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
        <TextField fx:id="destinationFolderField" prefHeight="25.0" prefWidth="64.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-       <Button onAction="#locateDestinationFolder" text="Open..." GridPane.columnIndex="3" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="File Settings" GridPane.rowIndex="1" />
+       <Button onAction="#locateDestinationFolder" text="Open..." GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="File Settings:" GridPane.rowIndex="1" />
       <ListView fx:id="settingsListBox" prefHeight="200.0" prefWidth="416.0" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" />
-      <HBox alignment="BOTTOM_RIGHT" prefHeight="23.0" prefWidth="296.0" spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="3">
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="23.0" prefWidth="296.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <children>
             <Button minWidth="25.0" mnemonicParsing="false" onAction="#onAddSettingClick" text="+" />
             <Button minWidth="25.0" mnemonicParsing="false" onAction="#onRemoveSettingClick" text="-" />
          </children>
       </HBox>
-      <HBox alignment="BOTTOM_RIGHT" prefHeight="13.0" prefWidth="114.0" spacing="10.0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
-         <children>
-            <Button minWidth="52.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
-            <Button minWidth="52.0" mnemonicParsing="false" onAction="#onOkButtonClick" text="OK" />
-         </children>
-      </HBox>
+      <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+      <Button defaultButton="true" minWidth="52.0" mnemonicParsing="false" onAction="#onOkButtonClick" text="OK" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
    </children>
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints maxWidth="238.0" minWidth="41.0" prefWidth="139.0" />
-      <ColumnConstraints maxWidth="135.0" minWidth="0.0" prefWidth="120.0" />
-      <ColumnConstraints maxWidth="290.0" minWidth="108.0" prefWidth="115.0" />
+      <ColumnConstraints maxWidth="184.0" minWidth="0.0" prefWidth="174.0" />
+      <ColumnConstraints maxWidth="290.0" minWidth="49.0" prefWidth="59.0" />
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>

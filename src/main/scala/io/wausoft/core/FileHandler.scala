@@ -9,9 +9,9 @@ import java.io.{File => JavaFile}
 object FileHandler {
   // making all this lazy so it doesn't freak out with a ton of IO the very moment the class is called,
   // but rather doing the IO when it's needed
-  lazy val dir: JavaFile = ensure(Directory(RichPath.homeDir / ".autosort"))
-  lazy val fileLocation: JavaFile = ensure(File(dir / "settings.json"))
-  lazy val settings = SettingsAdministrator deserializeSettingsFile fileLocation
+  lazy val settingsHome: JavaFile = ensure(Directory(RichPath.homeDir / ".autosort"))
+  lazy val settingsFile: JavaFile = ensure(File(settingsHome / "settings.json"))
+  def currentSettings = SettingsAdministrator deserializeSettingsFile settingsFile
 
   /**
    * Makes sure the file is there and returns it

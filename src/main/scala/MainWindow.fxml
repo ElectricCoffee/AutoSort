@@ -22,7 +22,9 @@
       <ListView fx:id="settingsListBox" prefHeight="200.0" prefWidth="416.0" GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" />
       <HBox alignment="BOTTOM_RIGHT" prefHeight="23.0" prefWidth="296.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <children>
+             <!-- Plus button -->
             <Button minWidth="25.0" mnemonicParsing="false" onAction="#onAddSettingClick" text="+" />
+             <!-- Minus button -->
             <Button minWidth="25.0" mnemonicParsing="false" onAction="#onRemoveSettingClick" text="-" />
          </children>
       </HBox>

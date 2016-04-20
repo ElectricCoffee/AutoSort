@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane
 import javafx.stage.{DirectoryChooser, Stage, FileChooser}
 import io.wausoft.core.FileHandler
 import io.wausoft.data.{SettingsContainer, SettingsAdministrator}
+import io.wausoft.data.RichPath._
 
 class UIController {
   // Must be vars since they contain mutable data handled by JavaFX
@@ -20,10 +21,10 @@ class UIController {
 
   /**
    * Code that runs whenever the window opens
-   * @param event The event passed in by JavaFX
    */
-  @FXML protected def initialize(event: ActionEvent): Unit = {
+  @FXML protected def initialize(): Unit = {
     settings = FileHandler.currentSettings // set the local settings object to the current settings
+    folderPath = settings.`autosort-folder-path`
     // add code to populate the list box with the current settings
   }
 
@@ -35,7 +36,7 @@ class UIController {
     val chooser = new DirectoryChooser
     chooser setTitle "Choose Working Dictionary"
     val folder = chooser showDialog currentWindow
-    folderPath = if (folder != null) folder.getPath else ""
+    folderPath = Option(folder) getPathOrElse ""
     destinationFolderField setText folderPath
   }
 

@@ -45,4 +45,28 @@ object RichPath {
      */
     def toFile: File = new File(left)
   }
+
+  /**
+   * Kind of a cop-out, but it deals nicely with File instances that have a risk of being null
+   * @param left an Option File, can be either Some[File] or None
+   */
+  implicit class OptionalFile(left: Option[File]) {
+
+    /**
+     * Returns the path of a File instance if it exists, otherwise it returns whatever the user specified
+     * @param right The string to return instead, if the value is None
+     * @return String path based on instance of java.io.File, if one exists
+     */
+    def getPathOrElse(right: String): String = left match {
+      case Some(file) => file.getPath
+      case None => right
+    }
+
+    /**
+     * Returns the path of the java.io.File, if and only if it exists
+     * Otherwise it'll throw a java.util.NoSuchElementException
+     * @return String path of an instance of java.io.File
+     */
+    def getPath: String = left.get.getPath
+  }
 }

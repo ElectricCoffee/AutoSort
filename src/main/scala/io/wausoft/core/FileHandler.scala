@@ -56,6 +56,7 @@ object FileHandler {
   /**
    * Moves all the files from one folder to another
    * Or move a specific subset of files given a predicate
+   * @param movement Is the type of movement, consisting of a file and its destination
    * @param predicate a predicate that designates the rules of whatever files must be moved
    */
   def move(movement: DataMovement, predicate: JavaFile => Boolean = _ => true): Unit = movement match {
